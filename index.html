@@ -6,12 +6,12 @@
     <title>Ultimate Sudoku Mini App</title>
     <script src="https://telegram.org"></script>
     <style>
-                /* ☀️ DEFAULT LIGHT THEME COLOR MAP */
+                        /* ☀️ DEFAULT LIGHT THEME COLOR MAP */
         :root {
             --bg-color: #f4f6f9;
             --text-color: #333333;
             --primary-color: #0088cc;
-            --grid-bg: #000000;
+            --grid-bg: #ffffff; /* Match cell bg */
             --cell-bg: #ffffff;
             --fixed-bg: #f0f2f5;
             --fixed-text: #555555;
@@ -21,22 +21,29 @@
             --user-text: #0088cc;
             --control-bg: #ffffff;
             --border-color: #cccccc;
+            /* 💡 Line thicknesses color definitions */
+            --cell-border: #e0e0e0;
+            --subgrid-border: #000000;
         }
+
         /* 🌙 DARK THEME COLOR MAP */
         [data-theme="dark"] {
             --bg-color: #181a1b;
-            --text-color: #f8f8f7;
+            --text-color: #e8e6e3;
             --primary-color: #2481cc;
-            --grid-bg: #64c1ea;
+            --grid-bg: #6fbbd4; /* Match cell bg */
             --cell-bg: #1e2122;
             --fixed-bg: #2a2e30;
-            --fixed-text: #f5f3ef;
+            --fixed-text: #dbd4c7;
             --selected-bg: #1a4968;
-            --highlight-bg: #263542;
+            --highlight-bg: #80b8e9;
             --error-text: #ff6666;
             --user-text: #52b3ff;
             --control-bg: #222628;
             --border-color: #444a4d;
+            /* 💡 Thin lines become a subtle dark grey, thick borders stay bright slate */
+            --cell-border: #2d3133;
+            --subgrid-border: #98b2bb;
         }
                 body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -101,17 +108,19 @@
         .btn-primary { background: var(--primary-color); color: #ffffff; border: none; flex: 1; }
         .btn-primary:active { background: #006699; }
         
-        .sudoku-grid {
+                .sudoku-grid {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
             width: 100%;
             max-width: 360px;
             background-color: var(--grid-bg);
-            border: 3px solid var(--grid-bg);
-            gap: 1px;
+            /* Outer frame box border thickness */
+            border: 3px solid var(--subgrid-border);
+            gap: 0px; /* 💡 Wiped out to prevent thick background block lines */
             box-sizing: border-box;
             border-radius: 4px;
             overflow: hidden;
+            transition: border-color 0.3s ease;
         }
         .cell {
             aspect-ratio: 1;
@@ -123,12 +132,15 @@
             font-weight: bold;
             cursor: pointer;
             box-sizing: border-box;
+            /* 💡 Default thin non-monolithic interior cell borders */
+            border: 1px solid var(--cell-border);
+            transition: background-color 0.15s ease, border-color 0.3s ease;
         }
         
-        /* Inner grid borders layout settings */
-        .cell:nth-child(3n) { border-right: 2px solid var(--grid-bg); }
+        /* 💡 Thick 3x3 sub-grid boundary overrides mapping */
+        .cell:nth-child(3n) { border-right: 3px solid var(--subgrid-border); }
         .cell:nth-child(9n) { border-right: none; }
-        .row-3, .row-6 { border-bottom: 2px solid var(--grid-bg); }
+        .row-3, .row-6 { border-bottom: 3px solid var(--subgrid-border); }
         
         /* Game engine interactive colors */
         .selected { background-color: var(--selected-bg) !important; }
