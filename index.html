@@ -19,15 +19,18 @@
         }
         h2 { color: #333; margin-bottom: 20px; }
         
-        /* Layout matrix box container */
+                /* Layout matrix box container */
         .sudoku-container {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
             width: 100%;
             max-width: 360px;
+            min-height: 320px; /* 💡 FIX: Prevents the puzzle grid box from collapsing down to zero pixels! */
             border: 3px solid #000;
             background-color: #fff;
+            margin: 0 auto;
         }
+
         
         /* Individual number box slots */
         .cell {
