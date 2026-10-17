@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Mini App</title>
+    <!-- Link the Official Telegram Mini App Controller Script -->
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+        h2 { color: #333; margin-bottom: 20px; }
+        
+        /* Layout matrix box container */
+        .sudoku-container {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            width: 100%;
+            max-width: 360px;
+            border: 3px solid #000;
+            background-color: #fff;
+        }
+        
+        /* Individual number box slots */
+        .cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        /* Standard 3x3 block sub-grid borders formatting */
+        .cell:nth-child(3n) { border-right: 2px solid #000; }
+        .cell:nth-child(9n) { border-right: none; }
+        /* Apply row separation lines */
+        .sudoku-container div:nth-child(1) { border-top: none; }
+        
+        .selected { background-color: #b3d4fc !important; }
+        .fixed { background-color: #e9ecef; color: #666; cursor: not-allowed; }
+
+        /* Bottom number keyboard picker pad grid */
+        .num-pad {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 5px;
+            width: 100%;
+            max-width: 360px;
+            margin-top: 25px;
+        }
+        .pad-btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .pad-btn:active { background-color: #006699; }
+    </style>
+</head>
+<body>
+
+    <h2>🧩 Sudoku Mini Game</h2>
+
+    <!-- The Sudoku Board Grid Box -->
+    <div class="sudoku-container" id="board"></div>
+
+    <!-- The Input Number Controller Buttons -->
+    <div class="num-pad">
+        <button class="pad-btn" onclick="pressNumber(1)">1</button>
+        <button class="pad-btn" onclick="pressNumber(2)">2</button>
+        <button class="pad-btn" onclick="pressNumber(3)">3</button>
+        <button class="pad-btn" onclick="pressNumber(4)">4</button>
+        <button class="pad-btn" onclick="pressNumber(5)">5</button>
+        <button class="pad-btn" onclick="pressNumber(6)">6</button>
+        <button class="pad-btn" onclick="pressNumber(7)">7</button>
+        <button class="pad-btn" onclick="pressNumber(8)">8</button>
+        <button class="pad-btn" onclick="pressNumber(9)">9</button>
+    </div>
+
+    <script>
+        // Tell Telegram's engine to initialize the full-screen view panel
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let selectedCell = null;
+
+        // Mock puzzle layout state (0 means blank square)
+        const mockBoard = [
+            [5,3,0,0,7,0,0,0,0],
+            [6,0,0,1,9,5,0,0,0],
+            [0,9,8,0,0,0,0,6,0],
+            [8,0,0,0,6,0,0,0,3],
+            [4,0,0,8,0,3,0,0,1],
+            [7,0,0,0,2,0,0,0,6],
+            [0,6,0,0,0,0,2,8,0],
+            [0,0,0,4,1,9,0,0,5],
+            [0,0,0,0,8,0,0,7,9]
+        ];
+
+        const boardElement = document.getElementById('board');
+
+        // Draw the visual interactive grid boxes on loop load
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                
+                // Add thicker border lines for horizontal 3x3 block separations
+                if (r === 2 || r === 5) { cell.style.borderBottom = "2.5px solid #000"; }
+                
+                const val = mockBoard[r][c];
+                if (val !== 0) {
+                    cell.innerText = val;
+                    cell.classList.add('fixed'); // Fixed puzzle starting clues
+                } else {
+                    // Click events for empty cells
+                    cell.onclick = function() {
+                        if (selectedCell) selectedCell.classList.remove('selected');
+                        selectedCell = cell;
+                        cell.classList.add('selected');
+                    };
+                }
+                boardElement.appendChild(cell);
+            }
+        }
+
+        // Action when a number pad key is tapped
+        function pressNumber(num) {
+            if (selectedCell && !selectedCell.classList.contains('fixed')) {
+                selectedCell.innerText = num;
+                selectedCell.style.color = "#0088cc"; // User answers show as blue!
+            }
+        }
+    </script>
+</body>
+</html>
