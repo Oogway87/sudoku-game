@@ -26,24 +26,24 @@
             --subgrid-border: #000000;
         }
 
-        /* 🌙 DARK THEME COLOR MAP */
+                /* 🌙 DARK THEME COLOR MAP */
         [data-theme="dark"] {
-            --bg-color: #181a1b;
+            --bg-color: #060d1a;       /* Darkest space background */
             --text-color: #e8e6e3;
-            --primary-color: #2481cc;
-            --grid-bg: #6fbbd4; /* Match cell bg */
-            --cell-bg: #1e2122;
-            --fixed-bg: #2a2e30;
-            --fixed-text: #dbd4c7;
-            --selected-bg: #1a4968;
-            --highlight-bg: #80b8e9;
+            --primary-color: #00b3cc;
+            --grid-bg: #0a192f;        /* Deep midnight navy matching the line backdrop */
+            --cell-bg: #0a192f;        /* Deep midnight navy cell matching the line backdrop */
+            --fixed-bg: #112240;       /* Slightly lighter navy for clue numbers */
+            --fixed-text: #8892b0;
+            --selected-bg: #172a45;
+            --highlight-bg: #1e3a5f;
             --error-text: #ff6666;
-            --user-text: #52b3ff;
-            --control-bg: #222628;
-            --border-color: #444a4d;
-            /* 💡 Thin lines become a subtle dark grey, thick borders stay bright slate */
-            --cell-border: #2d3133;
-            --subgrid-border: #98b2bb;
+            --user-text: #00f2ff;      /* Glowing user values */
+            --control-bg: #112240;
+            --border-color: #233554;
+            /* 💡 NEON EFFECT: Glowing cyan borders matching your image style */
+            --cell-border: rgba(0, 242, 255, 0.25); /* Thin, soft glowing neon inner lines */
+            --subgrid-border: #00f2ff;              /* Sharp, bright neon outer box walls */
         }
                 body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -108,19 +108,20 @@
         .btn-primary { background: var(--primary-color); color: #ffffff; border: none; flex: 1; }
         .btn-primary:active { background: #006699; }
         
-                .sudoku-grid {
+                        .sudoku-grid {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
             width: 100%;
             max-width: 360px;
             background-color: var(--grid-bg);
-            /* Outer frame box border thickness */
             border: 3px solid var(--subgrid-border);
-            gap: 0px; /* 💡 Wiped out to prevent thick background block lines */
+            gap: 0px;
             box-sizing: border-box;
             border-radius: 4px;
             overflow: hidden;
-            transition: border-color 0.3s ease;
+            /* 💡 Adds a beautiful neon halo aura drop glow to the board frame */
+            box-shadow: 0 0 15px var(--subgrid-border);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .cell {
             aspect-ratio: 1;
